@@ -1,0 +1,9 @@
+matplotlib==3.5.1
+matplotlib_label_lines==0.5.1
+mpltools==0.2.0
+numpy==1.19.5
+pandas==1.2.3
+scikit_misc==0.1.4
+scipy==1.7.3
+seaborn==0.11.1
+tensorflow==2.1.0
