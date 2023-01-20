@@ -15,7 +15,7 @@ conda activate py-37-keras-21
 ```bash
 python plot_AVN_catalog.py
 ```
-![Alt text](https://github.com/ss15859/Neural_Point_Process/tree/main/Dataset_with_completeness.png?raw=true "Overview")
+![Alt text](Dataset_with_completeness.png?raw=true "Overview")
 
 Results on the simulated datasets:
 ```text
