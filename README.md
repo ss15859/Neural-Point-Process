@@ -1,6 +1,6 @@
 # Forecasting the 2016-2017 Central Apennines Earthquake Sequence with a Neural Point Process
 
-Accompanying source code.
+Accompanying source code for [manuscript](https://arxiv.org/abs/2301.09948).
 
 ## Setup
 
