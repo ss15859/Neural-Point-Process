@@ -223,15 +223,20 @@ def main():
             times_of_targets = chopped_times[M_test[T_test>timeupto]>=M0pred]
             mags_of_targets = chopped_mags[M_test[T_test>timeupto]>=M0pred]
 
-            x = np.linspace(2,7,200)
+            x = np.linspace(2,6,200)
             my_dpi=96
-            fig, ax = plt.subplots(1,2,figsize=(1224/my_dpi, 639/my_dpi), dpi=my_dpi)
+            fig, ax = plt.subplots(1,1,figsize=(1224/my_dpi, 639/my_dpi), dpi=my_dpi)
 
             target_index = int(np.where(mags_of_targets==mags_of_targets.max())[0])
             index = np.where(M_test==M_test.max())
             index = int(index[0])
 
-            for i in range(2):
+            cmap = matplotlib.cm.get_cmap('Set1')
+
+            plot_list=[]
+            dot_list=[]
+
+            for i in range(5):
 
 
                 T = T_test[:index]
@@ -242,24 +247,33 @@ def main():
 
                 yNN = [npp.magdensfunc(i,reshape_RNN_times,reshape_RNN_mags, reshape_CHFN, reshape_CMFN,mask) for i in x]
 
-                y = MLE['beta']*np.exp(-MLE['beta']*(x-Mcut))*np.exp((M0pred-Mcut)*MLE['beta'])*(x>M0pred)
+                if i==0:
+                    y = MLE['beta']*np.exp(-MLE['beta']*(x-Mcut))*np.exp((M0pred-Mcut)*MLE['beta'])*(x>M0pred)
+                    p1, = ax.plot(x,np.log(y),color = '#36423cff',linewidth=3)
 
-                axi = np.ravel(ax)[i]
+                col = i
 
-                axi.set_ylim([0,3.5])
-                axi.fill(x,yNN,label = 'NN',color='#cb6952ff',linewidth=3,alpha=0.5,zorder=1000)
-                axi.fill(x,y,label = 'ETAS',color = '#36423cff',linewidth=3,alpha=0.7)
-                
-                axi.scatter(mags_of_targets[target_index],0,clip_on=False,zorder=100000,color = '#be2a35',s=120,label='Observed Magnitude')
-                axi.set_xlabel('Mw',fontsize=17)
-                axi.set_ylabel('density',fontsize=17)
-                axi.tick_params(axis='both', which='major', labelsize=12)
+
+                p, = ax.plot(x,np.log(yNN),color=cmap(col),linewidth=3,zorder=1000,alpha=0.4)
+                plot_list.append(p)                
+
+
+                dp = ax.scatter(mags_of_targets[target_index],np.log(npp.magdensfunc(mags_of_targets[target_index],reshape_RNN_times,reshape_RNN_mags, reshape_CHFN, reshape_CMFN,mask)),color=cmap(col), s=70,zorder=1000000)
+                dot_list.append(dp)
+                ax.set_xlabel('Mw',fontsize=17)
+                ax.set_ylabel('log-density',fontsize=17)
+                ax.tick_params(axis='both', which='major', labelsize=12)
 
                 index += 1
                 target_index+=1
+                print(tuple(dot_list))
 
 
-            ax[0].legend(fontsize=15)
+            l = ax.legend([tuple(plot_list), p1,dot_list[0]], ['NN', 'ETAS','Observed Magnitude'],
+               handler_map={tuple: HandlerTupleVertical()})
+
+            leg = ax.get_legend()
+            leg.legendHandles[2].set_color('gray')    
 
             fig.subplots_adjust(top=0.927,
             bottom=0.157,
