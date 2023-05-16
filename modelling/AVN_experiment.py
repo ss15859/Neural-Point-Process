@@ -219,7 +219,7 @@ def main():
         D.to_csv(path_to_results)
 
 
-    if len(sys.argv) > 3:
+if len(sys.argv) > 3:
         if sys.argv[3] == 'plot_mag_densities':
 
             chopped_times=T_test[T_test>timeupto]
@@ -252,20 +252,22 @@ def main():
                 else:
                     axi = np.ravel(ax)[1]
 
-                axi.set_ylim([0,3])
-                axi.fill(x,yNN,label = 'NN',color='#cb6952ff',linewidth=3,alpha=0.5,zorder=1000)
-                axi.fill(x,y,label = 'ETAS',color = '#36423cff',linewidth=3,alpha=0.7)
+                # axi.set_ylim([0,3])
+                # axi.fill(x,yNN,label = 'NN',color='#cb6952ff',linewidth=3,alpha=0.5,zorder=1000)
+                # axi.fill(x,y,label = 'ETAS',color = '#36423cff',linewidth=3,alpha=0.7)
+                axi.plot(x,np.log(yNN),label = 'NN',color='#cb6952ff',linewidth=3,zorder=1000)
+                axi.plot(x,np.log(y),label = 'ETAS',color = '#36423cff',linewidth=3)                
 
-                axi.scatter(mags_of_targets[target_index]+0.3,0,clip_on=False,zorder=100000,color = '#be2a35',s=120+(1-i)*1220,label='Observed Magnitude')
+                axi.axvline(mags_of_targets[target_index]+0.3,linestyle='--',clip_on=False,color = '#be2a35',label='Observed Magnitude')
                 axi.set_xlabel('Mw',fontsize=17)
-                axi.set_ylabel('density',fontsize=17)
+                axi.set_ylabel('log-density',fontsize=17)
                 axi.tick_params(axis='both', which='major', labelsize=12)
 
                 index += 1
                 target_index+=1
 
-            ax[0].text(5.4, 0.25,'Norcia', 
-                bbox=dict(boxstyle="round", alpha=0.1),fontsize=15)
+            # ax[0].text(5.8, -9.55,'Norcia', 
+            #     bbox=dict(boxstyle="round", alpha=0.1),fontsize=15)
 
             ax[1].legend(fontsize=15)
 
